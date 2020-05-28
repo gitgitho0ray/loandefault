@@ -1,5 +1,3 @@
-SET GLOBAL local_infile = true;
-SET GLOBAL local_infile = 1;
 
 create database bank;
 
@@ -16,16 +14,16 @@ create table bank.account
     datedate     varchar(6)
 
 );
-
 truncate bank.account;
-
 #load from file
-load data local infile '/Users/kvsteau/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/account.asc'
+load data local infile '/Users/idmp/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/account.asc'
 into table bank.account
 fields terminated by ';' ENCLOSED BY '"'
 lines terminated by '\n'
-ignore 1 lines
-;
+ignore 1 lines;
+
+
+
 select * from bank.account;
 
 alter table account
@@ -64,7 +62,7 @@ create table bank.client
 truncate bank.client;
 
 #load from file
-load data local infile '/Users/kvsteau/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/client.asc'
+load data local infile '/Users/idmp/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/client.asc'
 into table bank.client
 fields terminated by ';' ENCLOSED BY '"'
 lines terminated by '\n'
@@ -74,15 +72,10 @@ ignore 1 lines
 alter table client add column year varchar(4);
 alter table client add column month varchar(2);
 alter table client add column day varchar(2);
-
 UPDATE client set day = substring(birth_date,5,2);
 UPDATE client set month = substring(birth_date,3,2);
 UPDATE client set year = concat('19',substring(birth_date,1,2));
-
-
 select CAST(birth_date as date) from client;
-
-
 UPDATE client SET gender = CASE WHEN month > 12 THEN 'f' ELSE 'm' END;
 UPDATE client SET month = CASE WHEN gender ='f' THEN month-50 else month END
 
@@ -122,7 +115,7 @@ create table bank.disp
 truncate bank.disp;
 
 #load from file
-load data local infile '/Users/kvsteau/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/disp.asc'
+load data local infile '/Users/idmp/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/disp.asc'
 into table bank.disp
 fields terminated by ';'
 lines terminated by '\n'
@@ -149,7 +142,7 @@ create table bank.card
 truncate bank.card;
 
 #load from file
-load data local infile '/Users/kvsteau/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/card.asc'
+load data local infile '/Users/idmp/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/card.asc'
 into table bank.card
 fields terminated by ';' ENCLOSED BY '"'
 lines terminated by '\n'
@@ -182,7 +175,7 @@ create table bank.order
 truncate bank.order;
 
 #load from file
-load data local infile '/Users/kvsteau/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/order.asc'
+load data local infile '/Users/idmp/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/order.asc'
 into table bank.order
 fields terminated by ';'
 lines terminated by '\n'
@@ -229,7 +222,7 @@ create table bank.loan
 truncate bank.loan;
 
 #load from file
-load data local infile '/Users/kvsteau/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/loan.asc'
+load data local infile '/Users/idmp/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/loan.asc'
 into table bank.loan
 fields terminated by ';'
 lines terminated by '\n'
@@ -275,7 +268,7 @@ create table bank.trans
 truncate bank.trans;
 
 #load from file
-load data local infile '/Users/kvsteau/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/trans.asc'
+load data local infile '/Users/idmp/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/trans.asc'
 into table bank.trans
 fields terminated by ';'
 lines terminated by '\n'
@@ -367,7 +360,7 @@ create table bank.district
 truncate bank.district;
 
 #load from file
-load data local infile '/Users/kvsteau/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/district.asc'
+load data local infile '/Users/idmp/GoogleDrive/WCD_DS/W6/MidTerm/bank_loan/district.asc'
 into table bank.district
 fields terminated by ';'
 lines terminated by '\n'
@@ -378,5 +371,8 @@ select* from bank.district;
 
 update bank.district set A2= replace(A2,'"','');
 update bank.district set A3= replace(A3,'"','');
+
+select * from bank.order limit 5;
+
 
 

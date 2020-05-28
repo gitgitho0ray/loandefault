@@ -1,3 +1,4 @@
+use bank;
 select
        c.client_id c_id
      , a.account_id
@@ -222,18 +223,26 @@ where loan_id = 5126;
 
 
 ####GDS
+drop table if exists distrtict_gds;
 create table distrtict_gds as (
-select  a.district_id
+select subq.district_id
+    , GDS
+    , urbanratio
+    , (un96+un95)/2 as avgunemprate
+from
+(select  a.district_id
        , round(avg(payments)/max(A11),2) GDS
 from loan
 join account a on loan.account_id = a.account_id
 join client c on a.district_id = c.district_id
 join district d on a.district_id = d.district_id
 group by a.district_id
-order by a.district_id asc);
+order by a.district_id asc) subq
+join demos d2 on subq.district_id = d2.district_id);
 
-
-drop table if exists loanratios;
+select * from trxb4loan
+where operation like 'transferou%';
+drop table if exists loanratios1;
 create table loanratios1 as(
 select
         loan_id,
@@ -266,7 +275,7 @@ select
                 when operation like 'transferou%' then amount
               end) num_trout,
         avg(case
-                when operation like 'transferot%' then amount
+                when operation like 'transferou%' then amount
               end) avg_trout,
         count(case
                 when k_symbol like 'sanctio%' then 1 else 0
@@ -276,7 +285,7 @@ select
     group by loan_id, status)
 
 ####### FINAL TABLE
-drop table if exists mldataset;
+drop table if exists mldataset_1;
 create table mldataset_1 as(
 select
     status,
@@ -311,9 +320,9 @@ select
         when aplicant_age >= 65 then 7
        end agebracket,
      GDS,
-     ubranratio,
+     dg.urbanratio,
      avgsal,
-     avgunempreate,
+     avgunemprate,
      selfemprate
 from loanratios1 l
 join act_f af on l.loan_id = af.loan_id
